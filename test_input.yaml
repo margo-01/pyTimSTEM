@@ -1,0 +1,22 @@
+potential_filename: "potential.xy"
+unit_cell_nx: 1
+unit_cell_ny: 2
+cells_x: 3
+cells_y: 4 # super cell size in y direction (number of unit cells) 
+# supercell needs to be approximately square to avoid artifacts in the diffraction pattern
+energy_kev: 200.0
+scan_start_x: 0.0 # starting x position for the scan in bohr 
+scan_end_x: 10.0 # ending x position for the scan in bohr
+scan_start_y: 0.0 # starting y position for the scan in bohr
+scan_end_y: 10.0 # ending y position for the scan in bohr
+
+probe_step_x: 0.1 # step size for the probe in x direction in bohr
+probe_step_y: 0.1 # step size for the probe in y direction in bohr
+
+c3: 0.0
+c5: 0.0
+defocus: 0.0
+alpha_max_mrad: 31.5 # maximum convergence angle in mrad
+
+reference_x:  0.0 #reference poiint for the projected potential in bohr
+reference_y:  0.0 
