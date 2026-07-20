@@ -28,17 +28,29 @@ def build_supercell(vz, cells_x, cells_y): # here the adjusted vz , l.308 onward
 
     return vz_sc
 
-def make_real_space_grid():
-    pass
+def make_real_space_grids(nx, ny, dx, dy, nx_sc, ny_sc):
+    xsc_npt = nx_sc*(nx-1)+1 # l.324
+    ysc_npt = ny_sc*(ny-1)+1
+    x = np.arange(xsc_npt, dtype=float) * dx #l. 340
+    y = np.arange(ysc_npt, dtype=float) * dy 
+    return x, y
 
 def make_reciprocal_space_grid():
     pass
 
-def fft_forward():
-    pass
+def fft_forward(vz, dx, dy):
+    return (
+        dx
+        * dy
+        * np.fft.fftshift(np.fft.fft2(vz))
+    )
 
-def fft_backward():
-    pass
+
+def fft_backward(vz_k, dx, dy):
+    return (
+        np.fft.ifft2(np.fft.ifftshift(vz_k))
+        / (dx * dy)
+    )
 
 
 
