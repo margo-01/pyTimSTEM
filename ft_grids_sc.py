@@ -36,6 +36,19 @@ def make_real_space_grids(nx, ny, dx, dy, nx_sc, ny_sc):
     return x, y
 
 def make_reciprocal_space_grid():
+    # l.399 
+    
+      do i=1,ngx
+     kxgrid(i)=-real((ngx/2),kind=dp)*dkx+real((i-1),kind=dp)*dkx
+  end do
+  do j=1,ngy
+     kygrid(j)=-real((ngy/2),kind=dp)*dky+real((j-1),kind=dp)*dky
+  end do
+  do i=1,ngx
+     do j=1,ngy
+        kr(i,j)=sqrt(kxgrid(i)**2 + kygrid(j)**2)
+     end do
+  end do
     pass
 
 def fft_forward(vz, dx, dy):
