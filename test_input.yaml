@@ -1,3 +1,4 @@
+data_path: "./"
 potential_filename: "potential.xy"
 unit_cell_nx: 1
 unit_cell_ny: 2

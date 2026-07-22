@@ -5,6 +5,7 @@ import yaml
 
 @dataclass
 class SimConfig:
+    data_path: str
     potential_filename: str
 
     unit_cell_nx: int #number of grid points in the unit cell along x
