@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import omegaconf
 import yaml
+import numpy as np
 
 @dataclass
 class SimConfig:
@@ -48,3 +49,28 @@ class SimConfig:
         self.alpha_max_mrad *= 0.001 # convert alpha_max from mrad to rad
 
         self.k_max=self.alpha_max_mrad/self.wavelength
+
+    def electron_parameters(self):
+        ELEMENTARY_CHARGE_SI = 1.602176565e-19
+        ELECTRON_MASS_SI = 9.10938291e-31
+        SPEED_OF_LIGHT_SI = 299792458.0
+
+        energy_atomic = self.energy_kev / 0.027211385 # convert energy from keV to atomic units l.234
+
+        wavelength = 860.7963871 / np.sqrt(
+            energy_atomic * (energy_atomic + 37538.0) 
+        ) #calculate relativistic wavelength l. 237
+
+        gamma = (
+            1.0
+            + self.energy_kev
+            * 1000.0
+            * ELEMENTARY_CHARGE_SI
+            / (ELECTRON_MASS_SI * SPEED_OF_LIGHT_SI**2)
+        )
+
+        self.wavelength = wavelength
+        self.gamma = gamma
+        self.sigma = gamma * wavelength / 6.283185307
+
+

@@ -50,6 +50,11 @@ def make_radial_grid(x,y, Lx, Ly):
     )
     return r
 
+def make_recip_radial_grid():
+    pass
+
+    ##whole bunch for the radial grids l.429 - 464
+
 def make_reciprocal_space_grid(nx, ny, Lx, Ly):
     # l.399 
     dkx= ((nx-1)/nx)/Lx 
