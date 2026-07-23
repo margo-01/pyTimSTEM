@@ -36,7 +36,19 @@ def make_real_space_grids(nx, ny, dx, dy, nx_sc, ny_sc):
 
     Lx = x[-1]
     Ly = y[-1]
+
     return x, y, Lx, Ly
+
+def make_radial_grid(x,y, Lx, Ly):
+    # l. 348
+    x_centered = x - Lx / 2.0
+    y_centered = y - Ly / 2.0
+
+    r = np.sqrt(
+        x_centered[:, None] ** 2
+        + y_centered[None, :] ** 2
+    )
+    return r
 
 def make_reciprocal_space_grid(nx, ny, Lx, Ly):
     # l.399 
@@ -50,7 +62,6 @@ def make_reciprocal_space_grid(nx, ny, Lx, Ly):
 
     return kxgrid, kygrid, dkx, dky
 
-#Skipping radial grids because not needed for ptych
 
 
 def fft_forward(vz, dx, dy):

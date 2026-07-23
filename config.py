@@ -46,3 +46,5 @@ class SimConfig:
         self.c5 *= 18897259.890 # convert c5 from mm to atomic units
         self.defocus *= 1.889725989 # convert defocus from nm to atomic units
         self.alpha_max_mrad *= 0.001 # convert alpha_max from mrad to rad
+
+        self.k_max=self.alpha_max_mrad/self.wavelength
