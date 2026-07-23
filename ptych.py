@@ -25,32 +25,14 @@ def electron_parameters(energy_kev: float):
 
     return wavelength, sigma
 
-# !! calculate the interaction parameter l.241
 
-# !! convert c3 and c5, deltaf to au, alpha to radian l.246
-
-
-
+def transmission_function(sigma, vz): #l 473
+    t = np.exp(1j * sigma * vz)
+    return t
 
 
+# probe positions l.530 - l.558
 
+#build probe function
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#calcuate probe positions 

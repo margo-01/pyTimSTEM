@@ -40,3 +40,9 @@ class SimConfig:
         default_config = omegaconf.OmegaConf.structured(cls)
         merged_config = omegaconf.OmegaConf.merge(default_config, cfg_file)
         return omegaconf.OmegaConf.to_object(merged_config)
+
+    def convert_units(self):
+        self.c3 *= 18897259.890 # convert c3 from mm to atomic units
+        self.c5 *= 18897259.890 # convert c5 from mm to atomic units
+        self.defocus *= 1.889725989 # convert defocus from nm to atomic units
+        self.alpha_max_mrad *= 0.001 # convert alpha_max from mrad to rad

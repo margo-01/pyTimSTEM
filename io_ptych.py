@@ -1,8 +1,9 @@
 import numpy as np
+from pathlib import Path
 
-def read_vz(filename, nx, ny): #does not need nx and ny, can be inferred from data but can be useful to check the input
+def read_vz(filepath, filename, nx, ny): #does not need nx and ny, can be inferred from data but can be useful to check the input
     vz_data = []
-    with open(filename, 'r') as f:
+    with open(Path(filepath) / filename, 'r') as f:
         for line in f:
             vz_data.append(line.strip().split(","))
     vz_data = np.array(vz_data, dtype=float)
@@ -15,7 +16,7 @@ def read_vz(filename, nx, ny): #does not need nx and ny, can be inferred from da
     if nx != len(x_coords) or ny != len(y_coords):
         raise ValueError(f"Expected nx={nx} and ny={ny}, but got {len(x_coords)} and {len(y_coords)} from the data, check the input file.")
    
-    vz_values = vz_data[:, 2].reshape((ny, nx))
+    vz_values = vz_data[:, 2].reshape((nx, ny))
     return x_coords, y_coords, vz_values, dx, dy
 
 

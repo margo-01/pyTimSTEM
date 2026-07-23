@@ -34,8 +34,8 @@ def make_real_space_grids(nx, ny, dx, dy, nx_sc, ny_sc):
     x = np.arange(xsc_npt, dtype=float) * dx #l. 340
     y = np.arange(ysc_npt, dtype=float) * dy 
 
-    Lx = x[xsc_npt]
-    Ly = y[ysc_npt]
+    Lx = x[-1]
+    Ly = y[-1]
     return x, y, Lx, Ly
 
 def make_reciprocal_space_grid(nx, ny, Lx, Ly):
@@ -45,8 +45,8 @@ def make_reciprocal_space_grid(nx, ny, Lx, Ly):
     dky=((ny-1)/ny)/Ly
 
     
-    kxgrid=-(nx/2)*dkx+(np.arange(nx)-1)*dkx
-    kygrid=-(ny/2)*dky+(np.arange(ny)-1)*dky
+    kxgrid=-(nx/2)*dkx+(np.arange(nx))*dkx
+    kygrid=-(ny/2)*dky+(np.arange(ny))*dky
 
     return kxgrid, kygrid, dkx, dky
 
