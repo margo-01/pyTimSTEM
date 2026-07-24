@@ -20,12 +20,35 @@ def aperature_function(nx, ny, kr, k_max): #l. 608
 
 #   bfdiscsize = 2*int(k_max/dkx)+8 l.423
 # WRITES A DIFFERENT bfdiscsiye in the timstem output   write(outfile,*) "bfdiscsize: ", bfdiscsize+1
-
-
-
 # probe positions l.530 - l.558
+
+def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y, probe_step_x, probe_step_y):
+    np_x = int((scan_end_x - scan_start_x) / probe_step_x) + 1
+    np_y = int((scan_end_y - scan_start_y) / probe_step_y) + 1
+
+    if abs((scan_end_x-scan_start_x)-np.real(np_x-1)*probe_step_x)>= abs((scan_end_x-scan_start_x)-np.real(np_x)*probe_step_x):
+        np_x=np_x+1
+    if abs((scan_end_y-scan_start_y)-np.real(np_y-1)*probe_step_y)>= abs((scan_end_y-scan_start_y)-np.real(np_y)*probe_step_y):
+        np_y=np_y+1
+
+
+    num_probe_positions = np_x * np_y
+
+    rp_x = np.arange(scan_start_x, scan_end_x, probe_step_x)
+    rp_y = np.arange(scan_start_y, scan_end_y, probe_step_y)
+
+    if len(rp_x) != np_x:
+        raise ValueError(f"Expected np_x={np_x}, but got {len(rp_x)} from the calculated probe positions, check the input parameters.")
+    if len(rp_y) != np_y:   
+        raise ValueError(f"Expected np_y={np_y}, but got {len(rp_y)} from the calculated probe positions, check the input parameters.")
+        
+    return rp_x, rp_y, num_probe_positions
+
+
+    
+
 
 #build probe function
 
-#calcuate probe positions 
-
+def build_probe_function():
+    pass
