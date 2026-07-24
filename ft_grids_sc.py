@@ -50,9 +50,6 @@ def make_radial_grid(x,y, Lx, Ly):
     )
     return r
 
-def make_recip_radial_grid():
-    pass
-
     ##whole bunch for the radial grids l.429 - 464
 
 def make_reciprocal_space_grid(nx, ny, Lx, Ly):
@@ -66,6 +63,13 @@ def make_reciprocal_space_grid(nx, ny, Lx, Ly):
     kygrid=-(ny/2)*dky+(np.arange(ny))*dky
 
     return kxgrid, kygrid, dkx, dky
+
+def make_recip_radial_grid(kxgrid, kygrid): #l.406
+    kr  = np.sqrt(
+        kxgrid[:, None] ** 2
+        + kygrid[None, :] ** 2
+    )
+    return kr    
 
 
 
