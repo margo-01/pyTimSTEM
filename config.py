@@ -43,14 +43,6 @@ class SimConfig:
         return omegaconf.OmegaConf.to_object(merged_config)
 
     def convert_units(self):
-        self.c3 *= 18897259.890 # convert c3 from mm to atomic units
-        self.c5 *= 18897259.890 # convert c5 from mm to atomic units
-        self.defocus *= 1.889725989 # convert defocus from nm to atomic units
-        self.alpha_max_mrad *= 0.001 # convert alpha_max from mrad to rad
-
-        self.k_max=self.alpha_max_mrad/self.wavelength
-
-    def electron_parameters(self):
         ELEMENTARY_CHARGE_SI = 1.602176565e-19
         ELECTRON_MASS_SI = 9.10938291e-31
         SPEED_OF_LIGHT_SI = 299792458.0
@@ -72,5 +64,12 @@ class SimConfig:
         self.wavelength = wavelength
         self.gamma = gamma
         self.sigma = gamma * wavelength / 6.283185307
+
+        self.c3 *= 18897259.890 # convert c3 from mm to atomic units
+        self.c5 *= 18897259.890 # convert c5 from mm to atomic units
+        self.defocus *= 1.889725989 # convert defocus from nm to atomic units
+        self.alpha_max_mrad *= 0.001 # convert alpha_max from mrad to rad
+
+        self.k_max=self.alpha_max_mrad/self.wavelength
 
 

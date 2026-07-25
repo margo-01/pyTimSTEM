@@ -19,5 +19,5 @@ def read_vz(filepath, filename, nx, ny): #does not need nx and ny, can be inferr
     vz_values = vz_data[:, 2].reshape((nx, ny))
     return x_coords, y_coords, vz_values, dx, dy
 
-
-
+def write_4d_data():
+    pass

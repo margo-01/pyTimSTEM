@@ -59,8 +59,8 @@ def make_reciprocal_space_grid(nx, ny, Lx, Ly):
     dky=((ny-1)/ny)/Ly
 
     
-    kxgrid=-(nx/2)*dkx+(np.arange(nx))*dkx
-    kygrid=-(ny/2)*dky+(np.arange(ny))*dky
+    kxgrid=-(nx//2)*dkx+(np.arange(nx))*dkx #integer division (needed to handle cases where the number of points is odd)
+    kygrid=-(ny//2)*dky+(np.arange(ny))*dky
 
     return kxgrid, kygrid, dkx, dky
 

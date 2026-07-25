@@ -1,4 +1,6 @@
 import numpy as np
+
+import ft_grids_sc as ftg
 # CHECK THIS PART!!!
 
 def transmission_function(sigma, vz): #l 473
@@ -26,29 +28,35 @@ def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y
     np_x = int((scan_end_x - scan_start_x) / probe_step_x) + 1
     np_y = int((scan_end_y - scan_start_y) / probe_step_y) + 1
 
-    if abs((scan_end_x-scan_start_x)-np.real(np_x-1)*probe_step_x)>= abs((scan_end_x-scan_start_x)-np.real(np_x)*probe_step_x):
+    if abs((scan_end_x-scan_start_x)-np.real(np_x-1)*probe_step_x)> abs((scan_end_x-scan_start_x)-np.real(np_x)*probe_step_x):
         np_x=np_x+1
-    if abs((scan_end_y-scan_start_y)-np.real(np_y-1)*probe_step_y)>= abs((scan_end_y-scan_start_y)-np.real(np_y)*probe_step_y):
+    if abs((scan_end_y-scan_start_y)-np.real(np_y-1)*probe_step_y)> abs((scan_end_y-scan_start_y)-np.real(np_y)*probe_step_y):
         np_y=np_y+1
 
 
     num_probe_positions = np_x * np_y
 
-    rp_x = np.arange(scan_start_x, scan_end_x, probe_step_x)
-    rp_y = np.arange(scan_start_y, scan_end_y, probe_step_y)
+    rp_x = scan_start_x + np.arange(np_x) * probe_step_x
+    rp_y = scan_start_y + np.arange(np_y) * probe_step_y
 
-    if len(rp_x) != np_x:
-        raise ValueError(f"Expected np_x={np_x}, but got {len(rp_x)} from the calculated probe positions, check the input parameters.")
-    if len(rp_y) != np_y:   
-        raise ValueError(f"Expected np_y={np_y}, but got {len(rp_y)} from the calculated probe positions, check the input parameters.")
-        
+           
     return rp_x, rp_y, num_probe_positions
 
 
     
 
 
-#build probe function
+#build probe function for a specific probe position 
 
-def build_probe_function():
-    pass
+def build_probe_function(kxgrid, kygrid, dkx, dky, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
+    translation = np.exp(-1j * 2.0 * np.pi * (kxgrid[:, None] * r_px[nrp] + kygrid[None, :] * r_py[nrp]))
+    rec_probe = aperture_f * expchai_f * translation
+    probe = ftg.fft_backward(rec_probe, dkx, dky) #695
+    return probe
+
+
+
+
+
+
+
