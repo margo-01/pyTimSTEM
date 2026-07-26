@@ -48,15 +48,8 @@ def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y
 
 #build probe function for a specific probe position 
 
-def build_probe_function(kxgrid, kygrid, dkx, dky, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
+def build_rec_probe_function(kxgrid, kygrid, dkx, dky, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
     translation = np.exp(-1j * 2.0 * np.pi * (kxgrid[:, None] * r_px[nrp] + kygrid[None, :] * r_py[nrp]))
     rec_probe = aperture_f * expchai_f * translation
-    probe = ftg.fft_backward(rec_probe, dkx, dky) #695
-    return probe
-
-
-
-
-
-
+    return rec_probe
 

@@ -71,7 +71,10 @@ def make_recip_radial_grid(kxgrid, kygrid): #l.406
     )
     return kr    
 
-
+def find_nearest_grid_point(xgrid, ygrid, x_pt, y_pt):
+    ix = np.argmin(np.abs(xgrid - x_pt))
+    iy = np.argmin(np.abs(ygrid - y_pt))
+    return ix, iy
 
 def fft_forward(vz, dx, dy):
     return (

@@ -16,5 +16,26 @@ vz_sc = ft_grids_sc.build_supercell(vz, cfg.cells_x, cfg.cells_y)
 
 # Set up the grids
 
+# Ptych setup
 
-#
+
+#loop over probe positions
+
+
+for ix, probe_x in enumerate(rp_x):
+    for iy, probe_y in enumerate(rp_y):
+        probe_f = build_probe_fourier(...)
+        probe = fft_backward(probe_f, dx, dy)
+        probe = normalize_probe(probe, ...)
+
+        exit_wave = probe * transmission
+        diffraction_wave = fft_forward(exit_wave, dx, dy)
+        diffraction = np.abs(diffraction_wave) ** 2
+
+        patterns[ix, iy] = centered_crop(diffraction, detector_size)
+
+
+
+
+
+
