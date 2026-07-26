@@ -53,3 +53,6 @@ def build_rec_probe_function(kxgrid, kygrid, dkx, dky, aperture_f, expchai_f, r_
     rec_probe = aperture_f * expchai_f * translation
     return rec_probe
 
+def normalize_probe(probe, dx, dy):
+    pass
+     

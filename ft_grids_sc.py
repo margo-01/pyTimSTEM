@@ -2,8 +2,7 @@ import numpy as np
 
 def adjust_vz(vz, x_coords, y_coords, ref_x, ref_y): #set reference point to zero, make potential positive l.281
 
-    ix = np.argmin(np.abs(x_coords - ref_x))
-    iy = np.argmin(np.abs(y_coords - ref_y))
+    ix, iy = nearest_grid_index(x_coords, y_coords, ref_x, ref_y)
 
     reference_value = vz[ix, iy]
 
@@ -71,7 +70,7 @@ def make_recip_radial_grid(kxgrid, kygrid): #l.406
     )
     return kr    
 
-def find_nearest_grid_point(xgrid, ygrid, x_pt, y_pt):
+def nearest_grid_index(xgrid, ygrid, x_pt, y_pt):
     ix = np.argmin(np.abs(xgrid - x_pt))
     iy = np.argmin(np.abs(ygrid - y_pt))
     return ix, iy
