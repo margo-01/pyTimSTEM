@@ -90,7 +90,11 @@ def fft_backward(vz_k, dx, dy):
     )
 
 
+def simpson_1d():
+    pass
 
+def simpson_2d():
+    pass
 
 
 

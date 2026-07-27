@@ -20,7 +20,7 @@ def aperature_function(nx, ny, kr, k_max): #l. 608
     aperature[kr <= k_max] = 1.0
     return aperature
 
-#   bfdiscsize = 2*int(k_max/dkx)+8 l.423
+#   
 # WRITES A DIFFERENT bfdiscsiye in the timstem output   write(outfile,*) "bfdiscsize: ", bfdiscsize+1
 # probe positions l.530 - l.558
 
@@ -48,11 +48,48 @@ def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y
 
 #build probe function for a specific probe position 
 
-def build_rec_probe_function(kxgrid, kygrid, dkx, dky, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
+def build_rec_probe_function(kxgrid, kygrid, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
     translation = np.exp(-1j * 2.0 * np.pi * (kxgrid[:, None] * r_px[nrp] + kygrid[None, :] * r_py[nrp]))
     rec_probe = aperture_f * expchai_f * translation
     return rec_probe
 
-def normalize_probe(probe, dx, dy):
-    pass
+def normalize_probe(probe, xgrid, ygrid, scan_start_x, scan_end_x, scan_start_y, scan_end_y, dx, dy):
+    ix_start, iy_start = ftg.nearest_grid_index(
+        xgrid,
+        ygrid,
+        scan_start_x,
+        scan_start_y,
+    )
+
+    ix_end, iy_end = ftg.nearest_grid_index(
+        xgrid,
+        ygrid,
+        scan_end_x,
+        scan_end_y,
+    )
+
+    probe_sqr = np.zeros(probe.shape, dtype=float)
+
+    probe_sqr[
+        ix_start : ix_end + 1,
+        iy_start : iy_end + 1,
+    ] = np.abs(
+        probe[
+            ix_start : ix_end + 1,
+            iy_start : iy_end + 1,
+        ]
+    ) ** 2
+
+    integrated_intensity = simpson_2d(
+        probe_sqr,
+        dx,
+        dy,
+    )
+
+    if integrated_intensity <= 0:
+        raise ValueError(
+            "Integrated probe intensity is not positive"
+        )
+
+    return probe / np.sqrt(integrated_intensity)
      
