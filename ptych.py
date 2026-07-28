@@ -53,7 +53,7 @@ def build_rec_probe_function(kxgrid, kygrid, aperture_f, expchai_f, r_px, r_py, 
     rec_probe = aperture_f * expchai_f * translation
     return rec_probe
 
-def normalize_probe(probe, xgrid, ygrid, scan_start_x, scan_end_x, scan_start_y, scan_end_y, dx, dy):
+def find_norm_bounds(scan_start_x, scan_end_x, scan_start_y, scan_end_y, xgrid, ygrid): 
     ix_start, iy_start = ftg.nearest_grid_index(
         xgrid,
         ygrid,
@@ -67,6 +67,12 @@ def normalize_probe(probe, xgrid, ygrid, scan_start_x, scan_end_x, scan_start_y,
         scan_end_x,
         scan_end_y,
     )
+
+    return ix_start, ix_end, iy_start, iy_end
+
+#probe normalisation only within the scan grid (?) l.697 - 713
+def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end, dx, dy):
+
 
     probe_sqr = np.zeros(probe.shape, dtype=float)
 
