@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.integrate import simpson
 
 import ft_grids_sc as ftg
 # CHECK THIS PART!!!
@@ -86,9 +87,8 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end, dx, dy):
         ]
     ) ** 2
 
-    integrated_intensity = simpson_2d(
-        probe_sqr,
-        dx,
+    integrated_intensity = simpson(
+        simpson(probe_sqr), #check if the integration parameters need to be refined
         dy,
     )
 
