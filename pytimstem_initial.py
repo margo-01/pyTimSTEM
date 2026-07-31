@@ -44,12 +44,15 @@ aperture = ptych.aperature_function(cfg.unit_cell_nx, cfg.unit_cell_ny, cfg.kr, 
 rp_x, rp_y = ptych.calculate_probe_positions(cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, cfg.probe_step_x, cfg.probe_step_y)
 
 bfdiscsize = 2*int(cfg.k_max/dkx)+8 #l.423
+detector_size = bfdiscsize + 1
+
 
 #loop over probe positions
 
 
 for ix, probe_x in enumerate(rp_x):
     for iy, probe_y in enumerate(rp_y):
+        pattern = np.zeros((bfdiscsize, bfdiscsize))
         probe_f = ptych.build_rec_probe_function(kxgrid, kygrid, aperture, chai, rp_x, rp_y, iy)
         probe = ft_grids_sc.fft_backward(probe_f, dx, dy)
         probe = ptych.normalize_probe(probe, x, y, cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, dx, dy)
@@ -58,7 +61,9 @@ for ix, probe_x in enumerate(rp_x):
         diffraction_wave = ft_grids_sc.fft_forward(exit_wave, dx, dy)
         diffraction = np.abs(diffraction_wave) ** 2
 
-        patterns[ix, iy] = centered_crop(diffraction, detector_size)
+        pattern[ix, iy] = ptych.centered_crop(diffraction, detector_size)
+        io_ptych.write_4d_data()
+
 
 
 

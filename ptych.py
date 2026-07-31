@@ -37,7 +37,7 @@ def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y
 
     num_probe_positions = np_x * np_y
 
-    rp_x = scan_start_x + np.arange(np_x) * probe_step_x
+    rp_x = scan_start_x + np.arange(np_x) * probe_step_x #does this have the fi
     rp_y = scan_start_y + np.arange(np_y) * probe_step_y
 
            
@@ -72,14 +72,14 @@ def find_norm_bounds(scan_start_x, scan_end_x, scan_start_y, scan_end_y, xgrid, 
     return ix_start, ix_end, iy_start, iy_end
 
 #probe normalisation only within the scan grid (?) l.697 - 713
-def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end, dx, dy):
+def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
 
 
-    probe_sqr = np.zeros(probe.shape, dtype=float)
+    probe_sqr = np.zeros(probe.shape, dtype=float) 
 
     probe_sqr[
-        ix_start : ix_end + 1,
-        iy_start : iy_end + 1,
+        ix_start : ix_end + 1, #makes a rectangular array of the probe that is relevant for the scan region
+        iy_start : iy_end + 1, # outside of this there is padding with zeroes
     ] = np.abs(
         probe[
             ix_start : ix_end + 1,
@@ -87,15 +87,23 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end, dx, dy):
         ]
     ) ** 2
 
-    integrated_intensity = simpson(
-        simpson(probe_sqr), #check if the integration parameters need to be refined
-        dy,
-    )
+    integrated_intensity = simpson(probe_sqr), #check if the integration parameters need to be refined
+        
+    
 
     if integrated_intensity <= 0:
         raise ValueError(
             "Integrated probe intensity is not positive"
         )
 
-    return probe / np.sqrt(integrated_intensity)
+    probe = probe / np.sqrt(integrated_intensity)
+
+    return probe
+
+def centered_crop():
+    pass
+
+
+
+
      

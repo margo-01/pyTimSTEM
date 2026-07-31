@@ -90,7 +90,7 @@ def fft_backward(vz_k, dx, dy):
     )
 
 
-def simpson_1d():
+def simpson_1d(): #going with the scipy simpson integration for now 
     pass
 
 def simpson_2d():
