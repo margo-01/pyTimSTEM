@@ -100,7 +100,7 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
 
     return probe
 
-def centered_crop():
+def centered_crop(): #l 728 
     pass
 
 

@@ -58,11 +58,10 @@ for ix, probe_x in enumerate(rp_x):
         probe = ptych.normalize_probe(probe, x, y, cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, dx, dy)
 
         exit_wave = probe * t
-        diffraction_wave = ft_grids_sc.fft_forward(exit_wave, dx, dy)
-        diffraction = np.abs(diffraction_wave) ** 2
+        psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 
+       # diffraction = np.abs(diffraction_wave) ** 2 # only a small part on the detector is squarred and written to the output file, the rest is discarded
 
-        pattern[ix, iy] = ptych.centered_crop(diffraction, detector_size)
-        io_ptych.write_4d_data()
+        pattern[ix, iy] = ptych.centered_crop(psi_t, detector_size) # centered grid crop of the diffraction pattern
 
 
 
