@@ -72,7 +72,7 @@ def find_norm_bounds(scan_start_x, scan_end_x, scan_start_y, scan_end_y, xgrid, 
     return ix_start, ix_end, iy_start, iy_end
 
 #probe normalisation only within the scan grid (?) l.697 - 713
-def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
+def normalize_probe(probe, xgrid, ygrid, ix_start, ix_end, iy_start, iy_end):
 
 
     probe_sqr = np.zeros(probe.shape, dtype=float) 
@@ -87,7 +87,8 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
         ]
     ) ** 2
 
-    integrated_intensity = simpson(probe_sqr) #check if the integration parameters need to be refined
+    integrated_intensity = simpson(probe_sqr, x=ygrid[iy_start:iy_end + 1], axis=1),
+    x=xgrid[ix_start:ix_end + 1], #check if the integration parameters need to be refined
         
     
 

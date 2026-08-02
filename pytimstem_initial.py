@@ -59,7 +59,7 @@ if filename.exists():
 for ix in rp_x:
     for iy in rp_y:
         probe_f = ptych.build_rec_probe_function(
-            kxgrid, kygrid, aperture, chai, rp_x, rp_y
+            kxgrid, kygrid, aperture, chai, ix, iy
         )
         probe = ft_grids_sc.fft_backward(probe_f, dx, dy)
         ix_start, ix_end, iy_start, iy_end = ptych.find_norm_bounds(
