@@ -19,5 +19,14 @@ def read_vz(filepath, filename, nx, ny): #does not need nx and ny, can be inferr
     vz_values = vz_data[:, 2].reshape((nx, ny))
     return x_coords, y_coords, vz_values, dx, dy
 
-def write_4d_data():
+def write_4d_data(filename, data):
+
+    frame = np.asarray(data)
+
+    with open(Path(filename), "a", encoding="ascii", newline="\n") as f:
+        np.savetxt(f, frame, fmt="%.15e")
+
+
+
+def write_4d_data_hdf5(filepath, data):
     pass

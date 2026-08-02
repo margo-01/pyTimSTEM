@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 
 import config as config
 import ft_grids_sc
@@ -46,22 +47,30 @@ rp_x, rp_y = ptych.calculate_probe_positions(cfg.scan_start_x, cfg.scan_end_x, c
 bfdiscsize = 2*int(cfg.k_max/dkx)+8 #l.423
 detector_size = bfdiscsize + 1
 
+#checking if an output file already exists in the directory
 
-#loop over probe positions
+filename = Path(cfg.data_path) / "4D_000.raw"
+# check if the file exists in the directory
+if filename.exists():
+    raise FileExistsError(f"The file {filename} already exists. Please delete the existing file.")
 
+# loop over probe positions
 
-for ix, probe_x in enumerate(rp_x):
-    for iy, probe_y in enumerate(rp_y):
-        pattern = np.zeros((bfdiscsize, bfdiscsize))
-        probe_f = ptych.build_rec_probe_function(kxgrid, kygrid, aperture, chai, rp_x, rp_y, iy)
+for ix in rp_x:
+    for iy in rp_y:
+        probe_f = ptych.build_rec_probe_function(
+            kxgrid, kygrid, aperture, chai, rp_x, rp_y
+        )
         probe = ft_grids_sc.fft_backward(probe_f, dx, dy)
-        probe = ptych.normalize_probe(probe, x, y, cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, dx, dy)
+        ix_start, ix_end, iy_start, iy_end = ptych.find_norm_bounds(
+            cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, x, y
+        )
+        probe = ptych.normalize_probe(probe, ix_start, ix_end, iy_start, iy_end)
 
         exit_wave = probe * t
         psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 
-       # diffraction = np.abs(diffraction_wave) ** 2 # only a small part on the detector is squarred and written to the output file, the rest is discarded
-
-        pattern[ix, iy] = ptych.centered_crop(psi_t, detector_size) # centered grid crop of the diffraction pattern
+        pattern = ptych.centered_crop(psi_t, detector_size)
+        io_ptych.write_4d_data(filename, pattern)
 
 
 

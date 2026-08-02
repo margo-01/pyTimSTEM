@@ -35,4 +35,4 @@ class ProgressLogger:
             self._file = None
 
 
-# add plots for vz, supercell-vz, aberration function, aperature function, probe function
+# add plots for vz, supercell-vz, aberration function, aperature function, probe function 

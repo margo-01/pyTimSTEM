@@ -49,8 +49,8 @@ def calculate_probe_positions(scan_start_x, scan_end_x, scan_start_y, scan_end_y
 
 #build probe function for a specific probe position 
 
-def build_rec_probe_function(kxgrid, kygrid, aperture_f, expchai_f, r_px, r_py, nrp):  #l.689
-    translation = np.exp(-1j * 2.0 * np.pi * (kxgrid[:, None] * r_px[nrp] + kygrid[None, :] * r_py[nrp]))
+def build_rec_probe_function(kxgrid, kygrid, aperture_f, expchai_f, r_px, r_py):  #l.689
+    translation = np.exp(-1j * 2.0 * np.pi * (kxgrid[:, None] * r_px + kygrid[None, :] * r_py))
     rec_probe = aperture_f * expchai_f * translation
     return rec_probe
 
@@ -87,7 +87,7 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
         ]
     ) ** 2
 
-    integrated_intensity = simpson(probe_sqr), #check if the integration parameters need to be refined
+    integrated_intensity = simpson(probe_sqr) #check if the integration parameters need to be refined
         
     
 
@@ -100,10 +100,29 @@ def normalize_probe(probe, ix_start, ix_end, iy_start, iy_end):
 
     return probe
 
-def centered_crop(): #l 728 
-    pass
+def centered_crop(psi_f, detector_size): #l 728
+    if detector_size > min(psi_f.shape):
+        raise ValueError("Detector crop is larger than the diffraction grid")
+    start_x = (psi_f.shape[0] - detector_size) // 2
+    start_y = (psi_f.shape[1] - detector_size) // 2
+    crop = psi_f[start_x:start_x + detector_size, start_y:start_y + detector_size]
+    crop = np.abs(crop) ** 2
+    return crop
 
 
 
 
-     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
