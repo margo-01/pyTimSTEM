@@ -24,7 +24,7 @@ def write_4d_data(filename, data):
     frame = np.asarray(data)
 
     with open(Path(filename), "a", encoding="ascii", newline="\n") as f:
-        np.savetxt(f, frame, fmt="%.15e")
+        np.savetxt(f, frame.ravel(order="F"), fmt="%.15e")
 
 
 

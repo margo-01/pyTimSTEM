@@ -65,10 +65,10 @@ class SimConfig:
         self.gamma = gamma
         self.sigma = gamma * wavelength / 6.283185307
 
-        self.c3_au *= 18897259.890 # convert c3 from mm to atomic units
-        self.c5_au *= 18897259.890 # convert c5 from mm to atomic units
-        self.defocus_au *= 1.889725989 # convert defocus from nm to atomic units
-        self.alpha_max_rad *= 0.001 # convert alpha_max from mrad to rad
+        self.c3_au = 18897259.890*self.c3 # convert c3 from mm to atomic units
+        self.c5_au = 18897259.890*self.c5 # convert c5 from mm to atomic units
+        self.defocus_au = 1.889725989*self.defocus # convert defocus from nm to atomic units
+        self.alpha_max_rad = 0.001*self.alpha_max_mrad # convert alpha_max from mrad to rad
 
         self.k_max=self.alpha_max_rad/self.wavelength
 

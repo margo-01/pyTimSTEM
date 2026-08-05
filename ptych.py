@@ -74,21 +74,18 @@ def find_norm_bounds(scan_start_x, scan_end_x, scan_start_y, scan_end_y, xgrid, 
 #probe normalisation only within the scan grid (?) l.697 - 713
 def normalize_probe(probe, xgrid, ygrid, ix_start, ix_end, iy_start, iy_end):
 
-
-    probe_sqr = np.zeros(probe.shape, dtype=float) 
-
-    probe_sqr[
-        ix_start : ix_end + 1, #makes a rectangular array of the probe that is relevant for the scan region
-        iy_start : iy_end + 1, # outside of this there is padding with zeroes
-    ] = np.abs(
-        probe[
-            ix_start : ix_end + 1,
-            iy_start : iy_end + 1,
-        ]
+    probe_sqr = np.abs(
+        probe[ix_start : ix_end + 1, iy_start : iy_end + 1]
     ) ** 2
 
-    integrated_intensity = simpson(probe_sqr, x=ygrid[iy_start:iy_end + 1], axis=1),
-    x=xgrid[ix_start:ix_end + 1], #check if the integration parameters need to be refined
+    integrated_intensity = simpson(
+        simpson(
+            probe_sqr,
+            x=ygrid[iy_start : iy_end + 1],
+            axis=1,
+        ),
+        x=xgrid[ix_start : ix_end + 1],
+    )
         
     
 
@@ -102,8 +99,8 @@ def normalize_probe(probe, xgrid, ygrid, ix_start, ix_end, iy_start, iy_end):
     return probe
 
 def centered_crop(psi_f, detector_size): #l 728
-    if detector_size > min(psi_f.shape):
-        raise ValueError("Detector crop is larger than the diffraction grid")
+   # if detector_size > min(psi_f.shape):
+     #   raise ValueError("Detector crop is larger than the diffraction grid")
     start_x = (psi_f.shape[0] - detector_size) // 2
     start_y = (psi_f.shape[1] - detector_size) // 2
     crop = psi_f[start_x:start_x + detector_size, start_y:start_y + detector_size]

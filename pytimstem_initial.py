@@ -40,9 +40,9 @@ kr = ft_grids_sc.make_recip_radial_grid(
 
 # Ptych setup
 t = ptych.transmission_function(cfg.sigma, vz_sc)
-chai = ptych.aberration_function(cfg.wavelength, cfg.c3_au, cfg.c5_au, cfg.defocus_au, cfg.kr)
-aperture = ptych.aperature_function(cfg.unit_cell_nx, cfg.unit_cell_ny, cfg.kr, cfg.k_max)
-rp_x, rp_y = ptych.calculate_probe_positions(cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, cfg.probe_step_x, cfg.probe_step_y)
+chai = ptych.aberration_function(cfg.wavelength, cfg.c3_au, cfg.c5_au, cfg.defocus_au, kr)
+aperture = ptych.aperature_function(nx, ny, kr, cfg.k_max)
+rp_x, rp_y, num_probe_positions = ptych.calculate_probe_positions(cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, cfg.probe_step_x, cfg.probe_step_y)
 
 bfdiscsize = 2*int(cfg.k_max/dkx)+8 #l.423
 detector_size = bfdiscsize + 1
@@ -56,16 +56,16 @@ if filename.exists():
 
 # loop over probe positions
 
-for ix in rp_x:
-    for iy in rp_y:
+for probe_x in rp_x:
+    for probe_y in rp_y:
         probe_f = ptych.build_rec_probe_function(
-            kxgrid, kygrid, aperture, chai, ix, iy
+            kxgrid, kygrid, aperture, chai, probe_x, probe_y
         )
         probe = ft_grids_sc.fft_backward(probe_f, dx, dy)
         ix_start, ix_end, iy_start, iy_end = ptych.find_norm_bounds(
             cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, x, y
         )
-        probe = ptych.normalize_probe(probe, ix_start, ix_end, iy_start, iy_end)
+        probe = ptych.normalize_probe(probe, x, y, ix_start, ix_end, iy_start, iy_end)
 
         exit_wave = probe * t
         psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 

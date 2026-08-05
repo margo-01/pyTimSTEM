@@ -1,7 +1,7 @@
 data_path: "./"
-potential_filename: "potential.xy"
-unit_cell_nx: 1
-unit_cell_ny: 2
+potential_filename: "vz_iam.out"
+unit_cell_nx: 10
+unit_cell_ny: 17
 cells_x: 3
 cells_y: 4 # super cell size in y direction (number of unit cells) 
 # supercell needs to be approximately square to avoid artifacts in the diffraction pattern
