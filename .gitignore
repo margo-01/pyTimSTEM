@@ -2,3 +2,5 @@ workspace
 __pycache__
 .vscode
 *.raw
+fortran_bench
+*.txt

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 import omegaconf
-import yaml
+
 import numpy as np
 
 @dataclass

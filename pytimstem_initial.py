@@ -1,16 +1,20 @@
-import numpy as np
 from pathlib import Path
 
 import config as config
 import ft_grids_sc
 import io_ptych
 import ptych 
+from utils import ProgressLogger
 
 # Load configuration from YAML file
 cfg = config.SimConfig.from_yaml("test_input.yaml")
+progress_logger = ProgressLogger(cfg)
+progress_logger.write("Welcome, this is pyTimSTEM! Getting ready to run your simulation.")
 cfg.convert_units()
 
 # Read the projected potential data 
+progress_logger.write(f"I read the projected potential data from the {cfg.potential_filename} file in the {cfg.data_path} directory")
+
 x_coords, y_coords, vz, dx, dy = io_ptych.read_vz(
     cfg.data_path,
     cfg.potential_filename,
@@ -22,6 +26,7 @@ vz = ft_grids_sc.adjust_vz(vz, x_coords, y_coords, cfg.reference_x, cfg.referenc
 vz_sc = ft_grids_sc.build_supercell(vz, cfg.cells_x, cfg.cells_y)
 
 # Set up the grids
+progress_logger.write(f"I am setting up the grids now")
 
 nx, ny = vz_sc.shape
 x, y, Lx, Ly = ft_grids_sc.make_real_space_grids(nx, ny, dx, dy, cfg.cells_x, cfg.cells_y)
@@ -37,7 +42,7 @@ kr = ft_grids_sc.make_recip_radial_grid(
     kxgrid,
     kygrid,
 )
-
+progress_logger.write(f"The real space grid has {nx} x {ny} points, and the reciprocal space grid has {kxgrid.shape[0]} x {kygrid.shape[0]} y points.")
 # Ptych setup
 t = ptych.transmission_function(cfg.sigma, vz_sc)
 chai = ptych.aberration_function(cfg.wavelength, cfg.c3_au, cfg.c5_au, cfg.defocus_au, kr)
@@ -55,7 +60,7 @@ if filename.exists():
     raise FileExistsError(f"The file {filename} already exists. Please delete the existing file.")
 
 # loop over probe positions
-
+progress_logger.write(f"We're all set! Starting the loop over probe positions. Total number of probe positions: {num_probe_positions}")
 for probe_x in rp_x:
     for probe_y in rp_y:
         probe_f = ptych.build_rec_probe_function(
@@ -71,7 +76,7 @@ for probe_x in rp_x:
         psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 
         pattern = ptych.centered_crop(psi_t, detector_size)
         io_ptych.write_4d_data(filename, pattern)
-
+progress_logger.write(f"All done! I saved the 4D dataset to {filename}. Please check the output and see if it is reasonable")    
 
 
 

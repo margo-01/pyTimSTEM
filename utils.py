@@ -3,8 +3,8 @@ from pathlib import Path
 
 
 class ProgressLogger:
-    def __init__(self, config, output_dir=None):
-        self.path = self._progress_log_path(config, output_dir)
+    def __init__(self, config):
+        self.path = self._progress_log_path(config)
         self._file = None
 
         if self.path is not None:
@@ -12,14 +12,13 @@ class ProgressLogger:
             self._file = self.path.open("w", encoding="utf-8")
 
     @staticmethod
-    def _progress_log_path(config, output_dir=None):
-        if getattr(config, "debug_path", None):
-            return Path(config.debug_path) / "pyTimSTEM_progress.txt"
+    def _progress_log_path(config):
+        if getattr(config, "data_path"):
+            return Path(config.data_path) / "pyTimSTEM_progress.txt"
+        else:
+            raise ValueError("Config object needs to have a 'data_path' attribute.")
 
-        if output_dir:
-            return Path(output_dir) / "pyTimSTEM_progress.txt"
 
-        return None
 
     def write(self, message):
         if self._file is None:
