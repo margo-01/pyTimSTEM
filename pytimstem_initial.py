@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 
 import config as config
 import ft_grids_sc
@@ -11,7 +12,7 @@ cfg = config.SimConfig.from_yaml("test_input.yaml")
 progress_logger = ProgressLogger(cfg)
 progress_logger.write("Welcome, this is pyTimSTEM! Getting ready to run your simulation.")
 cfg.convert_units()
-
+progress_logger.write(f"I converted the microscope parameter units to atomic units, c3: {cfg.c3_au}, c5: {cfg.c5_au}, defocus: {cfg.defocus_au}, alpha_max: {cfg.alpha_max_rad}, k_max: {cfg.k_max}, sigma: {cfg.sigma}")
 # Read the projected potential data 
 progress_logger.write(f"I read the projected potential data from the {cfg.potential_filename} file in the {cfg.data_path} directory")
 
@@ -42,7 +43,7 @@ kr = ft_grids_sc.make_recip_radial_grid(
     kxgrid,
     kygrid,
 )
-progress_logger.write(f"The real space grid has {nx} x {ny} points, and the reciprocal space grid has {kxgrid.shape[0]} x {kygrid.shape[0]} y points.")
+progress_logger.write(f"The real space grid has {nx} x {ny} points, and the reciprocal space grid has {kxgrid.shape[0]} x {kygrid.shape[0]} y points, with dkx: {dkx}, dky: {dky}")
 # Ptych setup
 t = ptych.transmission_function(cfg.sigma, vz_sc)
 chai = ptych.aberration_function(cfg.wavelength, cfg.c3_au, cfg.c5_au, cfg.defocus_au, kr)
@@ -51,6 +52,8 @@ rp_x, rp_y, num_probe_positions = ptych.calculate_probe_positions(cfg.scan_start
 
 bfdiscsize = 2*int(cfg.k_max/dkx)+8 #l.423
 detector_size = bfdiscsize + 1
+
+progress_logger.write(f"I am using a bfdiscsize of {bfdiscsize}.")
 
 #checking if an output file already exists in the directory
 
@@ -61,6 +64,8 @@ if filename.exists():
 
 # loop over probe positions
 progress_logger.write(f"We're all set! Starting the loop over probe positions. Total number of probe positions: {num_probe_positions}")
+loop_start = time.perf_counter()
+
 for probe_x in rp_x:
     for probe_y in rp_y:
         probe_f = ptych.build_rec_probe_function(
@@ -76,6 +81,9 @@ for probe_x in rp_x:
         psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 
         pattern = ptych.centered_crop(psi_t, detector_size)
         io_ptych.write_4d_data(filename, pattern)
+loop_elapsed = time.perf_counter() - loop_start
+progress_logger.write(f"Loop over probe positions completed in {loop_elapsed:.2f} seconds.")
+
 progress_logger.write(f"All done! I saved the 4D dataset to {filename}. Please check the output and see if it is reasonable")    
 
 
