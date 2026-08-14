@@ -4,3 +4,5 @@ __pycache__
 *.raw
 fortran_bench
 *.txt
+*_out
+*DS_Store

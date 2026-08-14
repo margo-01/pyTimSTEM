@@ -13,10 +13,10 @@ class ProgressLogger:
 
     @staticmethod
     def _progress_log_path(config):
-        if getattr(config, "data_path"):
-            return Path(config.data_path) / "pyTimSTEM_progress.txt"
+        if getattr(config, "output_dir", None) is not None:
+            return Path(config.output_dir) / "pyTimSTEM_progress.txt"
         else:
-            raise ValueError("Config object needs to have a 'data_path' attribute.")
+            raise ValueError("Config object needs to have a 'output_dir' attribute.")
 
 
 

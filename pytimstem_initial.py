@@ -9,6 +9,12 @@ from utils import ProgressLogger
 
 # Load configuration from YAML file
 cfg = config.SimConfig.from_yaml("test_input.yaml")
+
+output_dir = Path(cfg.data_path) / "pyTimSTEM_out"
+output_dir.mkdir(parents=True, exist_ok=True)
+
+cfg.output_dir = output_dir
+
 progress_logger = ProgressLogger(cfg)
 progress_logger.write("Welcome, this is pyTimSTEM! Getting ready to run your simulation.")
 cfg.convert_units()
@@ -57,8 +63,10 @@ progress_logger.write(f"I am using a bfdiscsize of {bfdiscsize}.")
 
 #checking if an output file already exists in the directory
 
-filename = Path(cfg.data_path) / "4D_000.raw"
-# check if the file exists in the directory
+
+
+filename = output_dir / "4D_000.timstem"# check if the file exists in the directory
+
 if filename.exists():
     raise FileExistsError(f"The file {filename} already exists. Please delete the existing file.")
 
