@@ -36,7 +36,7 @@ vz_sc = ft_grids_sc.build_supercell(vz, cfg.cells_x, cfg.cells_y)
 progress_logger.write(f"I am setting up the grids now")
 
 nx, ny = vz_sc.shape
-x, y, Lx, Ly = ft_grids_sc.make_real_space_grids(nx, ny, dx, dy, cfg.cells_x, cfg.cells_y)
+x, y, Lx, Ly = ft_grids_sc.make_real_space_grids(nx, ny, dx, dy)
 
 kxgrid, kygrid, dkx, dky = ft_grids_sc.make_reciprocal_space_grid(
         nx,

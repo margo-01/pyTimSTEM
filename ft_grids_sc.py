@@ -27,7 +27,12 @@ def build_supercell(vz, cells_x, cells_y): # here the adjusted vz , l.308 onward
 
     return vz_sc
 
-def make_real_space_grids(nx, ny, dx, dy, nx_sc, ny_sc):
+def make_real_space_grids(nx, ny, dx, dy):
+    x = np.arange(nx, dtype=float) * dx
+    y = np.arange(ny, dtype=float) * dy
+    return x, y, x[-1], y[-1]
+
+def make_real_space_grids_sc(nx, ny, dx, dy, nx_sc, ny_sc):
     xsc_npt = nx_sc*(nx-1)+1 # l.324
     ysc_npt = ny_sc*(ny-1)+1
     x = np.arange(xsc_npt, dtype=float) * dx #l. 340

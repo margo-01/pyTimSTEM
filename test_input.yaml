@@ -17,7 +17,7 @@ probe_step_y: 0.1 # step size for the probe in y direction in bohr
 c3: 0.0
 c5: 0.0
 defocus: 0.0
-alpha_max_mrad: 31.5 # maximum convergence angle in mrad
+alpha_max_mrad: 25.00 # maximum convergence angle in mrad
 
-reference_x:  0.0 #reference poiint for the projected potential in bohr
-reference_y:  0.0 
+reference_x:  0.5 #reference poiint for the projected potential in bohr
+reference_y:  0.5 
