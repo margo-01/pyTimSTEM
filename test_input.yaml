@@ -11,8 +11,8 @@ scan_end_x: 10.0 # ending x position for the scan in bohr
 scan_start_y: 0.0 # starting y position for the scan in bohr
 scan_end_y: 10.0 # ending y position for the scan in bohr
 
-probe_step_x: 0.1 # step size for the probe in x direction in bohr
-probe_step_y: 0.1 # step size for the probe in y direction in bohr
+probe_step_x: 0.5 # step size for the probe in x direction in bohr
+probe_step_y: 0.5 # step size for the probe in y direction in bohr
 
 c3: 0.0
 c5: 0.0

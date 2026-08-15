@@ -83,10 +83,15 @@ io_ptych.write_aperture(
 rp_x, rp_y, num_probe_positions = ptych.calculate_probe_positions(cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, cfg.probe_step_x, cfg.probe_step_y)
 io_ptych.write_probe_positions(output_dir / "debug_probe_positions.dat", rp_x, rp_y)
 
+## PROBE POSITIONS FINE ##
+
 bfdiscsize = 2*int(cfg.k_max/dkx)+8 #l.423
 detector_size = bfdiscsize + 1
 
-progress_logger.write(f"I am using a bfdiscsize of {bfdiscsize}.")
+progress_logger.write(f"I am using a bfdiscsize of {bfdiscsize+1}.")
+
+
+## BFDISCSIZE CHECKED AGAINST FORTRAN, CORRECT ##
 
 #checking if an output file already exists in the directory
 
@@ -111,6 +116,8 @@ for ix_probe, probe_x in enumerate(rp_x):
         if probe_number == 1:
             io_ptych.write_complex_grid(output_dir / "debug_probe_fourier.dat", probe_f)
             io_ptych.write_complex_grid(output_dir / "debug_probe_real.dat", probe)
+## FT AND REAL PROBES SEEM CORRECT ##
+
         ix_start, ix_end, iy_start, iy_end = ptych.find_norm_bounds(
             cfg.scan_start_x, cfg.scan_end_x, cfg.scan_start_y, cfg.scan_end_y, x, y
         )
@@ -125,13 +132,16 @@ for ix_probe, probe_x in enumerate(rp_x):
                 probe_x, probe_y, (ix_start, ix_end, iy_start, iy_end),
                 integral, norm_factor,
             )
+## NORMALIZATION WORKS BUT NUMERICAL DIFFERENCES WITH FORTRAN ##
 
         exit_wave = probe * t
         psi_t = ft_grids_sc.fft_forward(exit_wave, dx, dy) #in fortran, this part is calculated on the full grid 
         pattern = ptych.centered_crop(psi_t, detector_size)
         if probe_number == 1:
             io_ptych.write_complex_grid(output_dir / "debug_exit_fourier.dat", psi_t)
+            ## FT OF EXIT WAVE SEEMS CORRECT BUT NUMERICAK DIFFERENCES ##
             io_ptych.write_detector(output_dir / "debug_detector.dat", pattern)
+## PATTERN IS WRONGG ##
         io_ptych.write_4d_data(filename, pattern)
 loop_elapsed = time.perf_counter() - loop_start
 progress_logger.write(f"Loop over probe positions completed in {loop_elapsed:.2f} seconds.")
