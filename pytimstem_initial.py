@@ -139,9 +139,9 @@ for ix_probe, probe_x in enumerate(rp_x):
         pattern = ptych.centered_crop(psi_t, detector_size)
         if probe_number == 1:
             io_ptych.write_complex_grid(output_dir / "debug_exit_fourier.dat", psi_t)
-            ## FT OF EXIT WAVE SEEMS CORRECT BUT NUMERICAK DIFFERENCES ##
+            ## FT OF EXIT WAVE SEEMS CORRECT BUT NUMERICAL DIFFERENCES ##
             io_ptych.write_detector(output_dir / "debug_detector.dat", pattern)
-## PATTERN IS WRONGG ##
+## PATTERN IS CORRECT!! ##
         io_ptych.write_4d_data(filename, pattern)
 loop_elapsed = time.perf_counter() - loop_start
 progress_logger.write(f"Loop over probe positions completed in {loop_elapsed:.2f} seconds.")

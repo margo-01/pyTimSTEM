@@ -99,14 +99,23 @@ def normalize_probe(probe, xgrid, ygrid, ix_start, ix_end, iy_start, iy_end):
     return probe
 
 def centered_crop(psi_f, detector_size): #l 728
-   # if detector_size > min(psi_f.shape):
-     #   raise ValueError("Detector crop is larger than the diffraction grid")
-    start_x = (psi_f.shape[0] - detector_size) // 2
-    start_y = (psi_f.shape[1] - detector_size) // 2
-    crop = psi_f[start_x:start_x + detector_size, start_y:start_y + detector_size]
-    crop = np.abs(crop) ** 2
-    return crop
+    """Return the detector crop using the same indices as timstemv1.6.f90.
 
+    Fortran uses zero-based-equivalent starts of
+    ``N//2 - bfdiscsize//2`` with ``detector_size = bfdiscsize + 1``.
+    Its bounds checks repeat the nearest edge pixel if the requested crop
+    extends outside the Fourier grid; the explicit loops below preserve that
+    behavior and always return exactly ``detector_size x detector_size``.
+    """
+
+    bfdiscsize = detector_size - 1
+    start_x = psi_f.shape[0] // 2 - bfdiscsize // 2
+    start_y = psi_f.shape[1] // 2 - bfdiscsize // 2
+
+    indices_x = np.clip(start_x + np.arange(detector_size), 0, psi_f.shape[0] - 1)
+    indices_y = np.clip(start_y + np.arange(detector_size), 0, psi_f.shape[1] - 1)
+    crop = psi_f[np.ix_(indices_x, indices_y)]
+    return np.abs(crop) ** 2
 
 
 
